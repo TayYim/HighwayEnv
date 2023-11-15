@@ -23,6 +23,7 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
                 "real_time_rendering": True,
                 "simulation_frequency": 15,
                 "policy_frequency": 1,
+                "lane_change_time": 2,
                 "absolute_v": 0,
                 "relative_p_1": 0,
                 "relative_v_1": 0,
@@ -41,7 +42,7 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
 
     def _is_terminated(self) -> bool:
         """当车辆发生碰撞,episode结束 ."""
-        return self.ego_vehicle.crashed
+        return self.vehicle.crashed
 
     def _is_truncated(self) -> bool:
         return False
@@ -95,18 +96,18 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
         """
         road = self.road
         vehicles_type = utils.class_from_path(self.config["other_vehicles_type"])
+        starting_position_x = 40
 
         # 设置ego车辆为IDM模型控制.
         ego_vehicle = vehicles_type(
             road,
-            position=road.network.get_lane(("a", "b", 1)).position(40, 0),
+            position=road.network.get_lane(("a", "b", 1)).position(starting_position_x, 0),
             heading=0,
             speed=self.config["absolute_v"],
             enable_lane_change=True,
         )
         ego_vehicle.set_ego()
         ego_vehicle.color = (0, 255, 0)  # green
-        self.ego_vehicle = ego_vehicle
         road.vehicles.append(ego_vehicle)
         self.vehicle = ego_vehicle
 
@@ -114,7 +115,7 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
         v = vehicles_type(
             road,
             position=road.network.get_lane(("a", "b", 0)).position(
-                40
+                starting_position_x
                 + self.config["relative_p_1"]
                 + vehicles_type.LENGTH * np.sign(self.config["relative_p_1"]),
                 0,
@@ -124,11 +125,12 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
             enable_lane_change=False,
         )
         road.vehicles.append(v)
+        self.lc_vehicle = v
 
         v2 = vehicles_type(
             road,
             position=road.network.get_lane(("a", "b", 0)).position(
-                40
+                starting_position_x
                 + self.config["relative_p_2"]
                 + vehicles_type.LENGTH * np.sign(self.config["relative_p_2"]),
                 0,
@@ -140,10 +142,8 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
         road.vehicles.append(v2)
 
     def step(self, action):
-        # Make lane change
-        # TODO: make it a var
-        if self.time == 2:
-            self.road.vehicles[1].target_lane_index = ("a", "b", 1)
+        if self.time == self.config['lane_change_time']:
+            self.lc_vehicle.target_lane_index = ("a", "b", 1)
 
         # use super
         return super().step(action)
