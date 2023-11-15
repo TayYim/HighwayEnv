@@ -50,6 +50,7 @@ class RoadObject(ABC):
         self.crashed = False
         self.hit = False
         self.impact = np.zeros(self.position.shape)
+        self.is_ego = False # Mark whether this object is ego vehicle
 
     @classmethod
     def make_on_lane(cls, road: 'Road', lane_index: LaneIndex, longitudinal: float, speed: Optional[float] = None) \
@@ -133,6 +134,9 @@ class RoadObject(ABC):
     @property
     def velocity(self) -> np.ndarray:
         return self.speed * self.direction
+    
+    def set_ego(self):
+        self.is_ego = True
 
     def polygon(self) -> np.ndarray:
         points = np.array([

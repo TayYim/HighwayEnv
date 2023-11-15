@@ -177,6 +177,24 @@ class AbstractEnv(gym.Env):
             "crashed": self.vehicle.crashed,
             "action": action,
         }
+
+        # Collect data from each vehicle, to analyze the simulation
+        info["agents_data"] = []
+        for i, vehicle in enumerate(self.road.vehicles):
+            # Get data from each vehicle
+            info["agents_data"].append({
+                "id": i,
+                "is_ego": vehicle.is_ego,
+                "x": vehicle.position[0],
+                "y": vehicle.position[1],
+                "vx": vehicle.velocity[0],
+                "vy": vehicle.velocity[1],
+                "heading": vehicle.heading,
+                "speed": vehicle.speed,
+                "steering": vehicle.action['steering'],
+                "acceleration": vehicle.action['acceleration'],
+                "timer": vehicle.timer, })
+
         try:
             info["rewards"] = self._rewards(action)
         except NotImplementedError:

@@ -101,3 +101,9 @@ def register_highway_envs():
         entry_point='highway_env.envs:UTurnEnv'
     )
 
+    # front cutin
+    register(
+        id='front-cut-in-with-two-npc-v0',
+        entry_point='highway_env.envs:FrontCutInWithTwoNPCEnv',
+    )
+
