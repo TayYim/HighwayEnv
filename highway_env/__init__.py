@@ -107,3 +107,14 @@ def register_highway_envs():
         entry_point='highway_env.envs:FrontCutInWithTwoNPCEnv',
     )
 
+    register(
+        id='front-cut-in-v0',
+        entry_point='highway_env.envs:FrontCutInEnv',
+    )
+
+    register(
+        id='front-brake-v0',
+        entry_point='highway_env.envs:FrontBrakeEnv',
+    )
+
+
