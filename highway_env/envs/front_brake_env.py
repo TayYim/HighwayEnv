@@ -124,11 +124,10 @@ class FrontBrakeEnv(AbstractEnv):
         road.vehicles.append(v)
 
     def step(self, action):
-        # use super
+        # Stop, wait, and then go
         if self.time == 3:
             self.road.vehicles[1].target_speed = 0
         if self.time == 6:
             self.road.vehicles[1].target_speed = self.config["absolute_v"] + self.config["relative_v"]
-        print(self.road.vehicles[1].target_speed)
         return super().step(action)
 

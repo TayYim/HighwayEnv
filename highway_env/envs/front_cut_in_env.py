@@ -24,6 +24,7 @@ class FrontCutInEnv(AbstractEnv):
                 "real_time_rendering": True,
                 "simulation_frequency": 15,
                 "policy_frequency": 1,
+                "lane_change_time": 3,
                 "absolute_v": 20,
                 "relative_p": 20,
                 "relative_v": -5,
@@ -124,8 +125,7 @@ class FrontCutInEnv(AbstractEnv):
         road.vehicles.append(v)
 
     def step(self, action):
-        # 在steps==3时,进行变道.
-        if self.time == 3:
+        if self.time == self.config["lane_change_time"]:
             self.road.vehicles[1].target_lane_index = ("a", "b", 1)
 
         # use super
@@ -274,4 +274,3 @@ class FrontCutInWithTwoNPCEnv(AbstractEnv):
 
         # use super
         return super().step(action)
-
