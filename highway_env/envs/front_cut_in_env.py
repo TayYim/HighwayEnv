@@ -33,14 +33,9 @@ class FrontCutInEnv(AbstractEnv):
         return config
 
     def _reward(self, action: int) -> float:
-        """
-        在这个场景中，没有外界指令对车辆进行控制，所以实际上没有用到reward函数。
-        但是observation space和reward function必须在环境中被定义, 因此直接设置reward为常数.
-        """
         return 0
 
     def _is_terminated(self) -> bool:
-        """当车辆发生碰撞，episode结束 ."""
         return self.vehicle.crashed
 
     def _is_truncated(self) -> bool:
@@ -50,7 +45,6 @@ class FrontCutInEnv(AbstractEnv):
         return float(self.vehicle.crashed)
 
     def _reset(self) -> np.ndarray:
-        """初始化环境"""
         self._make_road()
         self._make_vehicles()
 

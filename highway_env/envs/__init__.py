@@ -10,4 +10,5 @@ from highway_env.envs.exit_env import *
 from highway_env.envs.racetrack_env import *
 from highway_env.envs.front_cut_in_env import *
 from highway_env.envs.front_brake_env import *
+from highway_env.envs.nonsignal_intersection_env import *
 
