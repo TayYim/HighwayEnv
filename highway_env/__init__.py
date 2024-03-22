@@ -121,3 +121,13 @@ def register_highway_envs():
         id="OppositeVehicleTakingPriority-v0",
         entry_point="highway_env.envs:OppositeVehicleTakingPriority",
     )
+
+    register(
+        id="NonSignalizedJunctionLeftTurn-v0",
+        entry_point="highway_env.envs:NonSignalizedJunctionLeftTurn",
+    )
+        
+    register(
+        id="NonSignalizedJunctionRightTurn-v0",
+        entry_point="highway_env.envs:NonSignalizedJunctionRightTurn",
+    )
